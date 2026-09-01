@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mysticxpzero</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--bg2:#141414;--ink:#f2efe9;--line:#1c1c1c;--muted:#9a9997}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif}
+.serif{font-family:'Instrument Serif',serif}
+a{color:inherit;text-decoration:none}
+#grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;mix-blend-mode:difference;display:none}
+#cursor-dot{width:6px;height:6px;background:#fff;border-radius:50%;position:absolute;transform:translate(-50%,-50%)}
+#cursor-ring{width:32px;height:32px;border:1px solid rgba(255,255,255,0.6);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:width 0.3s, height 0.3s}
+@media(min-width:901px){#cursor{display:block} body{cursor:none} a,.row,.pfp{cursor:none} .cursor-trail{display:block}}
+.cursor-trail{position:fixed;top:0;left:0;width:8px;height:8px;background:#fff;border-radius:50%;pointer-events:none;z-index:9998;mix-blend-mode:difference;display:none;will-change:transform,opacity}
+#loader{position:fixed;inset:0;background:#0a0a0a;z-index:10000;display:grid;place-items:center;transition:transform 0.8s cubic-bezier(.85,0,.15,1)}
+#loader.hide{transform:translateY(-100%)}
+.loader-line{position:absolute;bottom:0;left:0;height:1px;background:#fff;width:0%;transition:width 0.6s ease}
+.loader-inner{overflow:hidden}
+.loader-inner h1{font-size:18vw;line-height:0.8;letter-spacing:-0.06em;transform:translateY(100%);transition:transform 1s cubic-bezier(.85,0,.15,1) 0.2s}
+.loader-inner h1.up{transform:translateY(0)}
+nav{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;padding:18px 20px;z-index:30;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;background:rgba(10,10,10,0.9);border-bottom:1px solid var(--line);color:var(--muted);backdrop-filter:blur(12px)}
+.hero{padding:12vh 20px 6vh;display:flex;flex-direction:column;gap:28px;min-height:70vh}
+.pfp-wrap{display:flex;align-items:center;gap:14px}
+.pfp{width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--bg2);border:1px solid var(--line)}
+.pfp img{width:100%;height:100%;object-fit:cover}
+.hero-title h1{font-size:clamp(42px,12vw,144px);line-height:0.88;letter-spacing:-0.05em;font-weight:400}
+.hero-right p{font-size:14px;line-height:1.6;color:var(--muted);max-width:32ch}
+.pill{margin-top:18px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:100px;padding:8px 14px;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:var(--bg2);color:var(--muted)}
+.dot{width:5px;height:5px;background:#00ff88;border-radius:50%;box-shadow:0 0 8px #00ff88}
+.hint{padding:12px 20px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;border-bottom:1px solid var(--line);color:var(--muted)}
+.works{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:22px 20px;border-bottom:1px solid var(--line);color:var(--muted)}
+.row .meta{font-size:10px;opacity:0.5}
+.row .title{font-size:22px;letter-spacing:-0.02em;color:var(--ink);grid-column:1/-1}
+.row .arrow{opacity:0.3}
+.preview{display:none}
+.video-preview{width:100%;aspect-ratio:9/16;max-height:70vh;background:#111;border-radius:16px;overflow:hidden;margin-top:14px;display:none;border:1px solid #222}
+.video-preview video,.video-preview img{width:100%;height:100%;object-fit:cover}
+.row.active .video-preview{display:block}
+footer{padding:60px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:24px}
+footer h2{font-size:clamp(48px,14vw,128px);line-height:0.85;letter-spacing:-0.04em}
+.btn{display:inline-flex;background:var(--ink);color:var(--bg);border-radius:100px;padding:18px 28px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase}
+@media(min-width:901px){
+.hero{padding:18vh 36px 8vh;display:grid;grid-template-columns:130px 1fr 380px;gap:48px;align-items:start;min-height:85vh}
+.pfp-wrap{flex-direction:column;align-items:start;position:sticky;top:110px}
+.pfp{width:120px;height:120px}
+nav{padding:22px 36px}.hint{padding:14px 36px}
+.row{grid-template-columns:90px 1fr 120px 60px;align-items:center;padding:30px 36px;cursor:none}
+.row .title{grid-column:auto;font-size:clamp(22px,2.8vw,42px)}
+.row:hover{background:var(--ink);color:var(--bg)}.row:hover .title{color:var(--bg)}
+.video-preview{display:none!important}
+.preview{display:block;position:fixed;left:0;top:0;width:360px;height:640px;pointer-events:none;opacity:0;transform:scale(0.9);transition:opacity 0.4s, transform 0.4s;z-index:50;overflow:hidden;border-radius:16px;background:#111;border:1px solid #222}
+.preview.active{opacity:1;transform:scale(1)}
+.preview img,.preview video{width:100%;height:100%;object-fit:cover}
+footer{padding:100px 36px;flex-direction:row;justify-content:space-between;align-items:end}
+}
+</style>
+</head>
+<body>
+<div id="grain"></div>
+<div id="cursor"><div id="cursor-dot"></div><div id="cursor-ring"></div></div>
+<div id="loader"><div class="loader-inner"><h1 class="serif" id="loadText">mysticloveskitty</h1></div><div class="loader-line" id="loaderLine"></div></div>
+<nav><span>mysticloveskitty / 2026</span><span><a href="https://www.instagram.com/mysticxpzero?igsh=OW90M2U1bWprYzlr" target="_blank">IG @mysticloveskitty</a></span></nav>
+
+<section class="hero">
+<div class="pfp-wrap"><div class="pfp"><img src="cats.jpg"></div><div><b>mysticloveskitty</b><div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.5;margin-top:4px;color:var(--muted)">Hypic editor<br>India — Worldwide</div></div></div>
+<div class="hero-title"><h1 class="serif"><span>yo</span><span><em> wsp </em></span><span> GnG —</span></h1></div>
+<div class="hero-right"><p>Tap to play with sound. Hold for vibe.</p><div class="pill"><span class="dot"></span> available for paid edits</div></div>
+</section>
+
+<div class="hint"><span>Tap to play • sound on</span><span>03 works</span></div>
+
+<div class="works">
+<div class="row" data-src="amam.mp4">
+<div class="meta">01 / 06</div><div class="arrow">→</div>
+<div class="title serif">The Best</div>
+<div class="meta">18 sec • Alight Motion • MOBILE 🔊</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="tocatoca.mp4">
+<div class="meta">01 / 10</div><div class="arrow">→</div>
+<div class="title serif"><em>GOjo</em></div>
+<div class="meta">24 sec • Alight Motion • MOBILE 🔊</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="obito.mp4">
+<div class="meta">02 / 10</div><div class="arrow">→</div>
+<div class="title serif">Obito — NarutoS</div>
+<div class="meta">ALIGHT MOTION • MOBILE</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="gokuedit.mp4">
+<div class="meta">03 / 10</div><div class="arrow">→</div>
+<div class="title serif">Goku — DBS</div>
+<div class="meta">ALIGHT MOTION • MOBILE</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="borutoedit.mp4">
+<div class="meta">04 / 10</div><div class="arrow">→</div>
+<div class="title serif">Boruto — Blue Vortex 2</div>
+<div class="meta">ALIGHT MOTION • MOBILE</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="kokogoat.mp4">
+<div class="meta">05 / 10</div><div class="arrow">→</div>
+<div class="title serif">Kokushibo — KNY</div>
+<div class="meta">ALIGHT MOTION • MOBILE</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="fasternharder.mp4">
+<div class="meta">06 / 10</div><div class="arrow">→</div>
+<div class="title serif"><em>Sae</em></div>
+<div class="meta">24 sec • Alight Motion • MOBILE 🔊</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="madagoat.mp4">
+<div class="meta">07 / 10</div><div class="arrow">→</div>
+<div class="title serif"><em>Madara - NarutoS</em></div>
+<div class="meta">24 sec • Alight Motion • MOBILE 🔊</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="shinobu.mp4">
+<div class="meta">08 / 10</div><div class="arrow">→</div>
+<div class="title serif"><em>Shinobu - Kny</em></div>
+<div class="meta">24 sec • Alight Motion • MOBILE 🔊</div>
+<div class="video-preview"></div>
+</div>
+
+<div class="row" data-src="izuku.mp4">
+<div class="meta">09 / 10</div><div class="arrow">→</div>
+<div class="title serif"><em>Izuku - MHA</em></div>
+<div class="meta">24 sec • Alight Motion • MOBILE 🔊</div>
+<div class="video-preview"></div>
+</div>
+
+
+<div class="preview" id="preview"></div>
+</div>
+
+<footer><h2 class="serif">Let's<br>work.</h2><a class="btn" href="https://www.instagram.com/mysticxpzero?igsh=OW90M2U1bWprYzlr" target="_blank">DM on Instagram →</a></footer>
+
+<script>
+let w=0; const line=document.getElementById('loaderLine'), txt=document.getElementById('loadText');
+setTimeout(()=>txt.classList.add('up'),100);
+let iv=setInterval(()=>{w+=25; if(w>100)w=100; line.style.width=w+'%'; if(w>=100)clearInterval(iv)},100);
+setTimeout(()=>document.getElementById('loader').classList.add('hide'),900);
+
+const isMobile = window.innerWidth < 901;
+const rows=document.querySelectorAll('.row');
+const preview=document.getElementById('preview');
+
+function getMediaHTML(src, withSound){
+ if(!src) return '';
+ const isVideo = /\.(mp4|webm|mov)$/i.test(src);
+ if(isVideo){
+   if(withSound){
+     // MOBILE - with sound + controls
+     return `<video loop playsinline controls preload="metadata" src="${src}" style="width:100%;height:100%;object-fit:cover"></video>`;
+   } else {
+     // DESKTOP hover - muted preview
+     return `<video autoplay muted loop playsinline preload="metadata" src="${src}" style="width:100%;height:100%;object-fit:cover"></video>`;
+   }
+ } else {
+   return `<img src="${src}" loading="lazy" style="width:100%;height:100%;object-fit:cover">`;
+ }
+}
+
+if(isMobile){
+ rows.forEach(r=>{
+   r.addEventListener('click',()=>{
+     const wasActive = r.classList.contains('active');
+     rows.forEach(x=>{
+       const v = x.querySelector('.video-preview video');
+       if(v) v.pause();
+       x.classList.remove('active'); 
+       x.querySelector('.video-preview').innerHTML='';
+     });
+     if(!wasActive){
+       r.classList.add('active');
+       const box=r.querySelector('.video-preview');
+       box.innerHTML=getMediaHTML(r.dataset.src, true);
+       // auto play with sound after tap - browsers allow this because it's user gesture
+       setTimeout(()=>{
+         const vid = box.querySelector('video');
+         if(vid){
+           vid.muted=false;
+           vid.volume=1;
+           vid.play().catch(()=>{});
+         }
+       },100);
+     }
+   });
+ });
+} else {
+ const trails=[]; for(let i=0;i<3;i++){let d=document.createElement('div');d.className='cursor-trail';document.body.appendChild(d);trails.push({el:d,x:0,y:0})}
+ let mx=0,my=0,cx=0,cy=0; const cursor=document.getElementById('cursor');
+ window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+ (function loop(){ cx+=(mx-cx)*0.2; cy+=(my-cy)*0.2; cursor.style.left=cx+'px'; cursor.style.top=cy+'px'; trails.forEach((t,i)=>{ t.x+=(cx-t.x)*(0.2 - i*0.03); t.y+=(cy-t.y)*(0.2 - i*0.03); t.el.style.left=t.x+'px'; t.el.style.top=t.y+'px'; t.el.style.opacity=0.4 - i*0.12; }); requestAnimationFrame(loop); })();
+ rows.forEach(r=>{
+   r.addEventListener('mouseenter',()=>{preview.innerHTML=getMediaHTML(r.dataset.src, false); preview.classList.add('active')});
+   r.addEventListener('mousemove',e=>{preview.style.left=(e.clientX+24)+'px'; preview.style.top=(e.clientY-280)+'px'});
+   r.addEventListener('mouseleave',()=>preview.classList.remove('active'));
+   // click on desktop = play with sound in preview
+   r.addEventListener('click',()=>{
+     preview.innerHTML=getMediaHTML(r.dataset.src, true);
+     preview.classList.add('active');
+     const vid = preview.querySelector('video');
+     if(vid){ vid.muted=false; vid.play().catch(()=>{}) }
+   });
+ });
+}
+</script>
+</body>
+</html>
